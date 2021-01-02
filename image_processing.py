@@ -75,6 +75,14 @@ def convert_to_grayscale(image):
     im = ImageOps.grayscale(image)
     return im
 
+def clean_background(image, threshold = 0.5):
+    image[image < threshold] = 0.0
+    return image
+
+def resize_image(image, target_size=(28,28)):
+    output = image.resize(target_size)
+    return output
+
 def display_heatmap():
     """
     That function displays the image and the heatmap next to it.
