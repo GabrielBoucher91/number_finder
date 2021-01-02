@@ -48,6 +48,7 @@ def get_window(img, size=(28,28),pos=(0,0),channel=1):
     else:
         deltay=None
         range_y = (int(pos[0]-size[0]/2), int(pos[0]+size[0]/2))
+        range_y_window = (int(pos[0]-size[0]/2), int(pos[0]+size[0]/2))
 
     if size[1] / 2 > pos[1]:
         deltax = size[1] / 2 - pos[1]
@@ -60,6 +61,7 @@ def get_window(img, size=(28,28),pos=(0,0),channel=1):
     else:
         deltax = None
         range_x = (int(pos[1]-size[1]/2), int(pos[1]+size[1]/2))
+        range_x_window = (int(pos[1]-size[1]/2), int(pos[1]+size[1]/2))
 
     if deltax == None and deltay ==None:
         window = img[int(pos[0]-size[0]/2):int(pos[0]+size[0]/2), int(pos[1]-size[1]/2):int(pos[1]+size[1]/2),:]
@@ -76,8 +78,21 @@ def convert_to_grayscale(image):
     return im
 
 def clean_background(image, threshold = 0.5):
-    image[image < threshold] = 0.0
+    image[image < np.mean(image)*1.2] = 0.0
     return image
+
+def clean_backgroundV2(image):
+    image[image < np.mean(image)*1.1] = 0.0
+    image[image > 0.3] = 1
+    return image
+
+def increase_contrast(image):
+    min_val = np.amin(image)
+    max_val = np.amax(image)
+    delta = max_val-min_val
+    im = image-min_val
+    im = im/delta
+    return im
 
 def resize_image(image, target_size=(28,28)):
     output = image.resize(target_size)
