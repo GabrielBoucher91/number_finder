@@ -1,4 +1,6 @@
+import os
 import tensorflow as tf
+from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -7,15 +9,6 @@ mnist = tf.keras.datasets.mnist
 (train_images, train_label), (test_images, test_labels) = mnist.load_data()
 print(train_images.shape)
 print(train_label.shape)
-
-#plt.figure()
-#for i in range(25):
-#    plt.subplot(5,5,i+1)
-#    plt.xticks([])
-#    plt.yticks([])
-#    plt.grid(False)
-#    plt.imshow(train_images[i], cmap=plt.cm.binary)
-#plt.show()
 
 ### Pre-process data ###
 
@@ -78,8 +71,10 @@ print(output_data)
 print(output_data.shape)
 
 model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.001), loss=tf.keras.losses.CategoricalCrossentropy(), metrics=['accuracy'])
+checkpoint_path = './train_model/cp.ckpt'
+cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, save_weights_only=True, verbose=1)
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir='.\logs', histogram_freq=1)
-model.fit(x=train_images, y=train_labels_processed, epochs=15, callbacks=[tensorboard_callback])
+model.fit(x=train_images, y=train_labels_processed, epochs=15, callbacks=[tensorboard_callback, cp_callback])
 
 test_loss, test_acc = model.evaluate(test_images, test_labels_processed, verbose=1)
 
