@@ -39,14 +39,16 @@ imp.display_img(test_images[0])
 
 model = NN.createNetwork()
 
-image = cv2.imread('./image_test/imagetest.jpg')/255.0
+image = cv2.imread('./image_test/imagetest1.jpg')/255.0
 imp.display_img(image)
 image2 = imp.convert_to_grayscale(imp.convert_to_PIL(image))
 imp.display_img(image2)
 
 #window = imp.get_window(image, size=(36, 36), pos=(287, 360))
 #window = imp.get_window(image, size=(36, 36), pos=(204, 486))
-window = imp.get_window(image, size=(32,32), pos=(70, 229))
+#window = imp.get_window(image, size=(32, 32), pos=(70, 229))
+#window = imp.get_window(image, size=(32, 32), pos=(68, 379))
+window = imp.get_window(image, size=(38, 38), pos=(187, 504))
 #window = imp.get_window(image, size=(28, 28), pos=(287, 360))
 #window = imp.get_window(image, pos=(204, 486))
 #window = imp.get_window(image, pos=(70, 229))
@@ -54,7 +56,7 @@ window2 = imp.convert_to_grayscale(imp.convert_to_PIL(window))
 window2 = imp.resize_image(window2)
 nump_window2 = (1 - np.asarray(window2))/255.0
 print(nump_window2.shape)
-nump_window2 = imp.clean_background(nump_window2, threshold=0.75)
+nump_window2 = imp.clean_background(nump_window2, threshold=0.77)
 nump_window3 = np.expand_dims(nump_window2, [0, -1])
 nump_window3 = nump_window3
 
