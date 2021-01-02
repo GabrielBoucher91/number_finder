@@ -78,7 +78,7 @@ def convert_to_grayscale(image):
     return im
 
 def clean_background(image, threshold = 0.5):
-    image[image < np.mean(image)*1.2] = 0.0
+    image[image < np.mean(image)*1.3] = 0.0
     return image
 
 def clean_backgroundV2(image):

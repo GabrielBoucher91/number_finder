@@ -40,7 +40,7 @@ def createNetwork():
     MyNetwork = MyModel()
     MyNetwork.compile(loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
                       metrics=[tf.metrics.SparseCategoricalAccuracy()])
-    MyNetwork.load_weights(filepath="./train_model/cp.ckpt")
+    MyNetwork.load_weights(filepath="./train_model_2/cp2.ckpt")
 
     return MyNetwork
 

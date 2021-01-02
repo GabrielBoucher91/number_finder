@@ -9,9 +9,12 @@ mnist = tf.keras.datasets.mnist
 (train_images, train_label), (test_images, test_labels) = mnist.load_data()
 print(train_images.shape)
 print(train_label.shape)
+print(test_images.shape)
+print(test_labels.shape)
+
 
 ### Pre-process data ###
-
+"""
 train_images = train_images[:3000]/255.0
 test_images = test_images[:3000]/255.0
 train_label = train_label[:3000]
@@ -23,6 +26,25 @@ test_labels_processed = np.zeros((len(test_labels), 10))
 
 for i in range(len(train_label)):
     train_labels_processed[i,train_label[i]] = 1.0
+    test_labels_processed[i, test_labels[i]] = 1.0
+
+train_labels_processed = tf.convert_to_tensor(train_labels_processed)
+test_labels_processed = tf.convert_to_tensor(test_labels_processed)
+"""
+
+train_images = train_images/255.0
+test_images = test_images/255.0
+train_label = train_label
+test_labels = test_labels
+train_images = tf.expand_dims(train_images, -1)
+test_images = tf.expand_dims(test_images, -1)
+train_labels_processed = np.zeros((len(train_label), 10))
+test_labels_processed = np.zeros((len(test_labels), 10))
+
+for i in range(len(train_label)):
+    train_labels_processed[i, train_label[i]] = 1.0
+
+for i in range(len(test_labels)):
     test_labels_processed[i, test_labels[i]] = 1.0
 
 train_labels_processed = tf.convert_to_tensor(train_labels_processed)
@@ -71,12 +93,11 @@ print(output_data)
 print(output_data.shape)
 
 model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.001), loss=tf.keras.losses.CategoricalCrossentropy(), metrics=['accuracy'])
-checkpoint_path = './train_model/cp.ckpt'
+checkpoint_path = './train_model_2/cp2.ckpt'
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, save_weights_only=True, verbose=1)
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir='.\logs', histogram_freq=1)
 model.fit(x=train_images, y=train_labels_processed, epochs=15, callbacks=[tensorboard_callback, cp_callback])
 
 test_loss, test_acc = model.evaluate(test_images, test_labels_processed, verbose=1)
-
 
 
