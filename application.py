@@ -12,7 +12,7 @@ class Application(QtWidgets.QMainWindow, UI.Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
         self.videoCam = cv2.VideoCapture(0)
-        self.model = NN.createNetwork()
+        self.model = NN.createNetworkV2()
         self.mainPictureData = None
         self.originalPixmap = None
         self.actualPixmap = None

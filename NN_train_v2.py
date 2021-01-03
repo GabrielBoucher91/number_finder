@@ -32,33 +32,42 @@ train_labels_processed = tf.convert_to_tensor(train_labels_processed)
 test_labels_processed = tf.convert_to_tensor(test_labels_processed)
 """
 
-train_images = train_images[:10000]/255.0
-test_images = test_images[:1000]/255.0
-train_label = train_label[:10000]
-test_labels = test_labels[:1000]
+train_images = train_images/255.0
+test_images = test_images/255.0
+train_label = train_label
+test_labels = test_labels
 train_images = tf.expand_dims(train_images, -1)
 test_images = tf.expand_dims(test_images, -1)
-"""
+
 # Data Augmentation
 datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-    rotation_range=10,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    zoom_range=0.2,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    zoom_range=0.2
 )
 
 train_aug = datagen.flow(train_images, shuffle=False)
-train_aug.reset()
+
 print(train_aug.next().shape)
+train_aug.reset()
 train_aug_np = train_aug.next()
 for i in range(train_aug.__len__()):
     if i == 0:
         pass
     else:
-        train_aug_np = np.concatenate((train_aug.next(), train_aug_np))
+        train_aug_np = np.concatenate((train_aug_np, train_aug.next()))
 
-train_images = train_aug_np
 """
+plt.figure()
+for i in range(64):
+    plt.subplot(8, 8, i+1)
+    plt.grid(False)
+    plt.imshow(train_aug_np[i], cmap=plt.cm.binary)
+    plt.ylabel(train_label[i])
+
+plt.show()
+"""
+train_images = train_aug_np
 
 train_labels_processed = np.zeros((len(train_label), 10))
 test_labels_processed = np.zeros((len(test_labels), 10))
@@ -82,10 +91,10 @@ class MyModel(tf.keras.Model):
     def __init__(self):
         super(MyModel, self).__init__()
         self.Dropout1 = tf.keras.layers.Dropout(0.2)
-        self.Conv1 = tf.keras.layers.Conv2D(16, 2, padding='valid',activation='relu', input_shape=(1,28,28,1), name='Conv1')
+        self.Conv1 = tf.keras.layers.Conv2D(64, 2, padding='valid', activation='relu', input_shape=(1,28,28,1), name='Conv1')
         self.MaxPool1 = tf.keras.layers.MaxPool2D(padding='same')
         self.Dropout2 = tf.keras.layers.Dropout(0.2)
-        self.Conv2 = tf.keras.layers.Conv2D(16, 2, padding='valid', activation='relu', input_shape=(1,28,28,1), name='Conv2')
+        self.Conv2 = tf.keras.layers.Conv2D(128, 2, padding='valid', activation='relu', input_shape=(1,28,28,1), name='Conv2')
         self.MaxPool2 = tf.keras.layers.MaxPool2D(padding='same')
         self.Dropout3 = tf.keras.layers.Dropout(0.2)
         self.Flat = tf.keras.layers.Flatten()
