@@ -67,7 +67,10 @@ for i in range(64):
 
 plt.show()
 """
-train_images = train_aug_np
+train_images = np.concatenate((train_images, train_aug_np))
+train_label = np.concatenate((train_label, train_label))
+print(train_images.shape)
+print(train_label.shape)
 
 train_labels_processed = np.zeros((len(train_label), 10))
 test_labels_processed = np.zeros((len(test_labels), 10))
@@ -123,8 +126,8 @@ output_data = model(tf.reshape(train_images[0],(1,28,28,1)))
 print(output_data)
 print(output_data.shape)
 
-model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.01), loss=tf.keras.losses.CategoricalCrossentropy(), metrics=['accuracy'])
-checkpoint_path = './train_model_aug/cpaug.ckpt'
+model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.001), loss=tf.keras.losses.CategoricalCrossentropy(), metrics=['accuracy'])
+checkpoint_path = './train_model_aug_2/cpaug2.ckpt'
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, save_weights_only=True, verbose=1)
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir='.\logs', histogram_freq=1)
 model.fit(x=train_images, y=train_labels_processed, epochs=15, callbacks=[tensorboard_callback, cp_callback])
