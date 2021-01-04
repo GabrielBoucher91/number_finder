@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+import image_processing as imp
 
 mnist = tf.keras.datasets.mnist
 
@@ -29,20 +30,27 @@ datagen = tf.keras.preprocessing.image.ImageDataGenerator(
     rotation_range=0,
     width_shift_range=0.0,
     height_shift_range=0.0,
-    zoom_range=0.0
+    zoom_range=[0.75, 1.8]
 )
 
+
+datagen.fit(train_images)
 train_aug = datagen.flow(train_images, shuffle=False)
+noise = tf.keras.layers.GaussianNoise(0.2)
 
 print(train_aug.next().shape)
+
 train_aug.reset()
-train_aug_np = train_aug.next()
+train_aug_np = noise(train_aug.next())
 for i in range(train_aug.__len__()):
     if i == 0:
         pass
     else:
-        train_aug_np = np.concatenate((train_aug_np, train_aug.next()))
+        train_aug_np = np.concatenate((train_aug_np, noise(train_aug.next())))
 
+
+for i in range(train_aug_np.shape[0]):
+    train_aug_np[i] = imp.increase_contrast(train_aug_np[i])
 
 print(train_aug_np.shape)
 

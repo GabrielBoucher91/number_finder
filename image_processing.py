@@ -82,7 +82,7 @@ def clean_background(image, threshold = 0.5):
     return image
 
 def clean_backgroundV2(image):
-    image[image < np.mean(image)*1.1] = 0.0
+    image[image < np.mean(image)*1.2] = 0.0
     image[image > 0.3] = 1
     return image
 
