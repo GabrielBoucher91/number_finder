@@ -64,7 +64,11 @@ def get_window(img, size=(28,28),pos=(0,0),channel=1):
         range_x_window = (int(pos[1]-size[1]/2), int(pos[1]+size[1]/2))
 
     if deltax == None and deltay ==None:
-        window = img[int(pos[0]-size[0]/2):int(pos[0]+size[0]/2), int(pos[1]-size[1]/2):int(pos[1]+size[1]/2),:]
+        if channel!=1:
+            window = img[int(pos[0]-size[0]/2):int(pos[0]+size[0]/2), int(pos[1]-size[1]/2):int(pos[1]+size[1]/2), :]
+        else:
+            window = img[int(pos[0] - size[0] / 2):int(pos[0] + size[0] / 2),
+                     int(pos[1] - size[1] / 2):int(pos[1] + size[1] / 2)]
     else:
         window[range_y_window[0]:range_y_window[1], range_x_window[0]: range_x_window[1], :] = img[range_y[0]:range_y[1], range_x[0]:range_x[1], :]
     return window
