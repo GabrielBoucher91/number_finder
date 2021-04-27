@@ -4,6 +4,7 @@ It also includes the heatmap class.
 """
 import numpy as np
 import tensorflow as tf
+import image_processing as impro
 
 class MyModel(tf.keras.Model):
     def __init__(self):
@@ -165,13 +166,20 @@ def createNetworkV4():
 
     return MyNetwork
 
-class NumberHeatmap():
-    def __init__(self, windowSize, size):
-        self.__windowSize = windowSize
-        self.__size = size
-        self.__heatmap = np.zeros(size)
 
-    def updateHeatmap(self, position=(0, 0), value=0):
+class NumberHeatmap():
+    def __init__(self, image_size, window_sizes=(28, 32, 40)):
+        self.__windowSizes = window_sizes
+        self.__size = image_size
+        self.__heatmap = np.zeros((image_size[0]-max(window_sizes), image_size[1]-max(window_sizes), 3))
+
+    def get_heatmap(self):
+        return self.__heatmap
+
+    def reset_heatmap(self):
+        self.__heatmap = np.zeros((self.image_size[0] - max(self.window_sizes), self.image_size[1] - max(self.window_sizes), 3))
+
+    def updateHeatmap(self, position=(0, 0), value=[0, 0, 0]):
         self.__heatmap[position] = value
 
     def get_heatmapValue(self, position=(0, 0)):
@@ -180,9 +188,18 @@ class NumberHeatmap():
     def get_size(self):
         return self.__size
 
-    def get_windwoSize(self):
-        return self.__windowSize
+    def get_windowSizes(self):
+        return self.__windowSizes
 
+    def process_image(self, image, network):
+        width = self.__heatmap.shape[0]
+        height = self.__heatmap.shape[1]
 
-def extractValueForHeatmap(netOutput, threshold):
-    pass
+        start_point_w = max(self.__windowSizes)/2
+        end_point_w = start_point_w + width
+        start_point_h = max(self.__windowSizes) / 2
+        end_point_h = start_point_h + height
+
+        for i in range(width):
+            for j in range(height):
+                pass
