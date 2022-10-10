@@ -1,0 +1,2 @@
+model_checkpoint_path: "cpaug4.ckpt"
+all_model_checkpoint_paths: "cpaug4.ckpt"

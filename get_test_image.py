@@ -15,4 +15,4 @@ w = imp.get_window(image, size=(150, 150), pos=(10, 5), channel=3)
 print(w.shape)
 imp.display_img(w)
 
-cv2.imwrite('./image_test/imagetest1.jpg', image*255)
+#cv2.imwrite('./image_test/imagetest1.jpg', image*255)
