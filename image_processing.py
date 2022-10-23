@@ -2,7 +2,7 @@
 This file contains the functions for the image processing.
 First we open the image.
 Then a function extract parts of the image and format them for the NN.
-Then from the results of the NN, the image is displayed with the heatmap next to it.
+Then from the results of the NN, the image is displayed with the data found in it.
 
 """
 import numpy as np
@@ -28,52 +28,6 @@ def display_img(img):
     plt.imshow(img)
     plt.show()
 
-"""
-def get_window(img, size=(28,28),pos=(0,0),channel=1):
-
-    window = np.ones((size[0], size[1], channel))
-    image_dims = img.shape
-    # Check the position too see if the window goes out of bound.
-    #in x
-    if size[0]/2 > pos[0]:
-        deltay = size[0] / 2 - pos[0]
-        range_y = (0, int(size[0]-(size[0] / 2 - pos[0])))
-        range_y_window = (int(deltay), size[0])
-    elif size[0]/2 > (image_dims[0]-pos[0]):
-        deltay = size[0] / 2 - (image_dims[0]-pos[0])
-        range_y = (int(pos[0]-size[0]/2), int(image_dims[0]))
-        range_y_window = (0, int(size[0]-deltay))
-    else:
-        deltay=None
-        range_y = (int(pos[0]-size[0]/2), int(pos[0]+size[0]/2))
-        range_y_window = (int(pos[0]-size[0]/2), int(pos[0]+size[0]/2))
-
-    if size[1] / 2 > pos[1]:
-        deltax = size[1] / 2 - pos[1]
-        range_x = (0, int(size[1]-(size[1] / 2 - pos[1])))
-        range_x_window = (int(deltax), size[1])
-    elif size[1] / 2 > (image_dims[1] - pos[1]):
-        deltax = size[1] / 2 - (image_dims[1] - pos[1])
-        range_x = (int(pos[1]-size[1]/2), int(image_dims[1]))
-        range_x_window = (0, int(size[1] - deltax))
-    else:
-        deltax = None
-        range_x = (int(pos[1]-size[1]/2), int(pos[1]+size[1]/2))
-        range_x_window = (int(pos[1]-size[1]/2), int(pos[1]+size[1]/2))
-
-    if deltax == None and deltay ==None:
-        if channel!=1:
-            window = img[int(pos[0]-size[0]/2):int(pos[0]+size[0]/2), int(pos[1]-size[1]/2):int(pos[1]+size[1]/2), :]
-        else:
-            window = img[int(pos[0] - size[0] / 2):int(pos[0] + size[0] / 2),
-                     int(pos[1] - size[1] / 2):int(pos[1] + size[1] / 2)]
-    else:
-        if channel != 1:
-            window[range_y_window[0]:range_y_window[1], range_x_window[0]: range_x_window[1], :] = img[range_y[0]:range_y[1], range_x[0]:range_x[1], :]
-        else:
-            window[range_y_window[0]:range_y_window[1], range_x_window[0]: range_x_window[1], :] = img[range_y[0]:range_y[1], range_x[0]:range_x[1]]
-    return window
-"""
 
 def get_window(img, size=(28,28),pos=(0,0),channel=1):
     """
@@ -115,7 +69,6 @@ def clean_backgroundV2(image):
     return image
 
 def clean_backgroundV3(image, threshold):
-    #print("The mean of the image is " + str(np.mean(image)))
     ret, img = cv2.threshold(image, min(threshold * np.mean(image), 225), 255, cv2.THRESH_BINARY)
     #img = cv2.adaptiveThreshold(image.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
     #img = cv2.adaptiveThreshold(image.astype(np.uint8), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
@@ -133,11 +86,6 @@ def resize_image(image, target_size=(28,28)):
     output = image.resize(target_size)
     return output
 
-def display_heatmap():
-    """
-    That function displays the image and the heatmap next to it.
-    :return:
-    """
 
 def intersectionOverUnion(pos1, window1, pos2, window2):
     x11 = pos1[0] - window1[0]/2

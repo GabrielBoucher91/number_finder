@@ -1,5 +1,6 @@
 """
 File to create white background image so that the nn can recognize just white background.
+Not used
 
 
 """

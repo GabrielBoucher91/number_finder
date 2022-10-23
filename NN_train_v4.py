@@ -35,23 +35,6 @@ white_train = np.expand_dims(white_train, -1)
 
 
 ### Pre-process data ###
-"""
-train_images = train_images[:3000]/255.0
-test_images = test_images[:3000]/255.0
-train_label = train_label[:3000]
-test_labels = test_labels[:3000]
-train_images = tf.expand_dims(train_images, -1)
-test_images = tf.expand_dims(test_images, -1)
-train_labels_processed = np.zeros((len(train_label), 10))
-test_labels_processed = np.zeros((len(test_labels), 10))
-
-for i in range(len(train_label)):
-    train_labels_processed[i,train_label[i]] = 1.0
-    test_labels_processed[i, test_labels[i]] = 1.0
-
-train_labels_processed = tf.convert_to_tensor(train_labels_processed)
-test_labels_processed = tf.convert_to_tensor(test_labels_processed)
-"""
 
 train_images = train_images/255.0
 test_images = test_images/255.0
